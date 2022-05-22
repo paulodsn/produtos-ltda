@@ -1,3 +1,4 @@
+import views.Logged;
 import views.Login;
 
 import javax.swing.*;
@@ -5,7 +6,8 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Login login = new Login();
+            // TODO: Change screen to login
+            Logged login = new Logged();
             login.setVisible(true);
         });
     }

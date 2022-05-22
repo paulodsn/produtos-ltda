@@ -3,10 +3,10 @@ package controller;
 import database.dao.UserDAO;
 import database.model.User;
 
-public class Auth {
+public class AuthController {
     private UserDAO userDAO;
 
-    public Auth() {
+    public AuthController() {
         this.userDAO = new UserDAO();
     }
 

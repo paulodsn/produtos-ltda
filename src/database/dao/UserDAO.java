@@ -21,7 +21,8 @@ public class UserDAO {
         try {
             ArrayList<Object> params = new ArrayList<>();
             params.add(email);
-            userData = db.firstRow("select * from user where email = ?", params);
+            params.add(password);
+            userData = db.firstRow("select * from user where email = ? and password = ?", params);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class UserDAO {
 
         User user = new User();
         user.setName((String) userData.getAt(1));
-        user.setName((String) userData.getAt(2));
+        user.setEmail((String) userData.getAt(2));
         return user;
     }
 
@@ -43,7 +44,7 @@ public class UserDAO {
             db.rows("select * from user").forEach(row -> {
                 User user = new User();
                 user.setName((String) row.getAt(1));
-                user.setName((String) row.getAt(2));
+                user.setEmail((String) row.getAt(2));
                 
                 users.add(user);
             });
@@ -52,5 +53,19 @@ public class UserDAO {
         }
 
         return users;
+    }
+
+    public void create(User user) {
+        try {
+            ArrayList<Object> params = new ArrayList<>();
+            params.add(user.getName());
+            params.add(user.getEmail());
+            params.add(user.getPassword());
+            params.add(user.getRole());
+
+            db.executeInsert("INSERT INTO user (name, email, password, user_type_id) VALUES (?, ?, ?, ?)", params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

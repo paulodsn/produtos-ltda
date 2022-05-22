@@ -1,15 +1,15 @@
 package views;
 
 import helpers.LayoutConstraints;
-import controller.Auth;
+import controller.AuthController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
-    LayoutConstraints layoutConstraints;
-    Auth authService;
+    private LayoutConstraints layoutConstraints;
+    private AuthController authController;
 
     private JPanel panel;
     private JTextField emailInput;
@@ -17,7 +17,7 @@ public class Login extends JFrame {
 
 
     public Login() {
-        this.authService = new Auth();
+        this.authController = new AuthController();
         this.layoutConstraints = new LayoutConstraints();
 
         this.init();
@@ -71,11 +71,11 @@ public class Login extends JFrame {
         String email = this.emailInput.getText();
         String password = String.valueOf(this.passwordInput.getPassword());
 
-        boolean IsValidUser = this.authService.login(email, password);
+        boolean IsValidUser = this.authController.login(email, password);
 
         if (IsValidUser) {
-            Users users = new Users();
-            users.setVisible(true);
+            Logged logged = new Logged();
+            logged.setVisible(true);
 
             this.dispose();
         } else {
