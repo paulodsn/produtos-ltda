@@ -17,4 +17,5 @@
     ```
     docker run -p 3306:3306 --name produto-ltda -e MYSQL_ROOT_PASSWORD=root -d mysql:latest
     ```
-4. That's it.
+4. Build the code
+5. That's it.
