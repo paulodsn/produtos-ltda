@@ -51,13 +51,13 @@ public class Users extends JPanel {
 
     private JTable createTable() {
         JTable table = new JTable(tableModel);
-        tableModel.addColumn("name");
-        tableModel.addColumn("email");
+        tableModel.addColumn("Nome");
+        tableModel.addColumn("Email");
         table.getColumnModel().getColumn(0)
                 .setPreferredWidth(120);
         table.getColumnModel().getColumn(1)
                 .setPreferredWidth(120);
-        findUsers();
+        this.findUsers();
 
         return table;
     }

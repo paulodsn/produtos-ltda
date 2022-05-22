@@ -56,14 +56,14 @@ public class UserDAO {
     }
 
     public void create(User user) {
-        try {
-            ArrayList<Object> params = new ArrayList<>();
-            params.add(user.getName());
-            params.add(user.getEmail());
-            params.add(user.getPassword());
-            params.add(user.getRole());
+        ArrayList<Object> fields = new ArrayList<>();
+        fields.add(user.getName());
+        fields.add(user.getEmail());
+        fields.add(user.getPassword());
+        fields.add(user.getRole());
 
-            db.executeInsert("INSERT INTO user (name, email, password, user_type_id) VALUES (?, ?, ?, ?)", params);
+        try {
+            db.executeInsert("INSERT INTO user (name, email, password, user_type_id) VALUES (?, ?, ?, ?)", fields);
         } catch (SQLException e) {
             e.printStackTrace();
         }
