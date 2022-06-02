@@ -2,7 +2,6 @@ package views.forms;
 
 import controller.CustomerController;
 import database.model.Customer;
-import database.model.User;
 import helpers.LayoutConstraints;
 
 import javax.swing.*;

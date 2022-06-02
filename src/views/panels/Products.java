@@ -5,7 +5,8 @@ import database.model.Product;
 import helpers.CustomTableModel;
 import helpers.LayoutConstraints;
 import views.forms.ProductForm;
-import views.forms.UserForm;
+import views.reports.OrderReport;
+import views.reports.ProfitReport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,11 +41,21 @@ public class Products extends JPanel {
         JButton refreshButton = new JButton("Atualizar a lista");
         refreshButton.addActionListener(e -> this.findProducts());
         this.add(refreshButton, constraints);
+
+        layoutConstraints.addColumn();
+        JButton orderReportButton = new JButton("Relatório de vendas");
+        orderReportButton.addActionListener(e -> this.goToOrderReport(e));
+        this.add(orderReportButton, constraints);
+
+        layoutConstraints.addColumn();
+        JButton profitReportButton = new JButton("Relatório de Lucro");
+        profitReportButton.addActionListener(e -> this.goToProfitReport(e));
+        this.add(profitReportButton, constraints);
         layoutConstraints.addLine();
 
         JTable table = this.createTable();
         layoutConstraints.allSpace();
-        constraints.gridwidth = 2;
+        constraints.gridwidth = 4;
         this.add(table, constraints);
         JScrollPane scrollPane = new JScrollPane(table);
         this.add(scrollPane, constraints);
@@ -59,7 +70,7 @@ public class Products extends JPanel {
                 .setPreferredWidth(60);
         table.getColumnModel().getColumn(1)
                 .setPreferredWidth(40);
-        table.getColumnModel().getColumn(1)
+        table.getColumnModel().getColumn(2)
                 .setPreferredWidth(40);
         this.findProducts();
 
@@ -78,5 +89,15 @@ public class Products extends JPanel {
     private void goToProductForm(ActionEvent e) {
         ProductForm productForm = new ProductForm();
         productForm.setVisible(true);
+    }
+
+    private void goToOrderReport(ActionEvent e) {
+        OrderReport orderReport = new OrderReport();
+        orderReport.setVisible(true);
+    }
+
+    private void goToProfitReport(ActionEvent e) {
+        ProfitReport profitReport = new ProfitReport();
+        profitReport.setVisible(true);
     }
 }
