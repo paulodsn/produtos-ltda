@@ -1,6 +1,8 @@
 package database.dao;
 
 import database.Connection;
+import database.model.Order;
+import database.model.OrderDetail;
 import database.model.OrderReport;
 import database.model.ProfitReport;
 import groovy.sql.Sql;
@@ -15,6 +17,36 @@ public class OrderDAO {
 
     public OrderDAO() {
         this.db = new Connection().getInstance();
+    }
+
+    public void create(Order order) {
+        ArrayList<Object> fields = new ArrayList<>();
+        fields.add(order.getOrderStatusId());
+        fields.add(order.getCustomerId());
+
+        List<OrderDetail> orderDetailList = order.getOrderDetailList();
+
+        try {
+            db.executeInsert("INSERT INTO `order` (order_status_id, customer_id) VALUES (?, ?)", fields).forEach(row -> {
+                Number orderId = Integer.parseInt(row.get(0).toString());
+
+                for (int i = 0; i < orderDetailList.size(); i++) {
+                    OrderDetail x = orderDetailList.get(i);
+                    ArrayList<Object> detailFields = new ArrayList<>();
+                    detailFields.add(x.getProductId());
+                    detailFields.add(orderId);
+                    detailFields.add(x.getQuantity());
+
+                    try {
+                        db.executeInsert("INSERT INTO order_detail (product_id, order_id, quantity) VALUE(?, ?, ?) ", detailFields);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<OrderReport> getOrderByCustomer() {

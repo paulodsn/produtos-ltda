@@ -93,7 +93,7 @@ public class UserForm extends JFrame {
         String email = this.emailInput.getText();
         String password = String.valueOf(this.passwordInput.getPassword());
         String role = this.roleComboBox.getSelectedItem().toString();
-        Integer roleId = role == "Administrador" ? 1 : 0;
+        Integer roleId = role == "Administrador" ? 1 : 2;
 
         User user = new User();
         user.setName(name);

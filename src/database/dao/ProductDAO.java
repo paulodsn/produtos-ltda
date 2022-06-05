@@ -39,9 +39,11 @@ public class ProductDAO {
         fields.add(product.getName());
         fields.add(product.getPrice());
         fields.add(product.getStock());
+        fields.add(product.getCode());
+        fields.add(product.getWeight());
 
         try {
-            db.executeInsert("INSERT INTO product (name, price, stock) VALUES (?, ?, ?)", fields);
+            db.executeInsert("INSERT INTO product (name, price, stock, code, weight) VALUES (?, ?, ?, ?, ?)", fields);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package controller;
 
 import database.dao.OrderDAO;
+import database.model.Order;
 import database.model.OrderReport;
 import database.model.ProfitReport;
 
@@ -11,6 +12,10 @@ public class OrderController {
 
     public OrderController() {
         this.orderDAO = new OrderDAO();
+    }
+
+    public void create(Order order) {
+        this.orderDAO.create(order);
     }
 
     public List<OrderReport> getOrderByCustomer() {

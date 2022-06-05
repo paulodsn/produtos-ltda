@@ -13,6 +13,8 @@ public class ProductForm extends JFrame {
     private LayoutConstraints layoutConstraints;
     private ProductController productController;
 
+    private JTextField weightInput;
+    private JTextField codeInput;
     private JTextField nameInput;
     private JTextField priceInput;
     private JTextField stockInput;
@@ -40,6 +42,25 @@ public class ProductForm extends JFrame {
         GridBagLayout layout = new GridBagLayout();
         panel = new JPanel(layout);
 
+        // Weight group
+        layoutConstraints.addLine();
+        JLabel weightLabel = new JLabel("Peso do Produto");
+        panel.add(weightLabel, constraints);
+        layoutConstraints.addLine();
+
+        this.weightInput = new JTextField(30);
+        panel.add(weightInput, constraints);
+        layoutConstraints.addLine();
+
+        // Code group
+        layoutConstraints.addLine();
+        JLabel codeLabel = new JLabel("Código do Produto");
+        panel.add(codeLabel, constraints);
+        layoutConstraints.addLine();
+
+        this.codeInput = new JTextField(30);
+        panel.add(codeInput, constraints);
+        layoutConstraints.addLine();
 
         // Name group
         layoutConstraints.addLine();
@@ -82,11 +103,15 @@ public class ProductForm extends JFrame {
         String name = this.nameInput.getText();
         Double price = Double.parseDouble(this.priceInput.getText());
         Integer stock = Integer.parseInt(this.stockInput.getText());
+        String code = this.codeInput.getText();
+        Float weight = Float.parseFloat(this.weightInput.getText());
 
         Product product = new Product();
+        product.setWeight(weight);
         product.setName(name);
         product.setPrice(price);
         product.setStock(stock);
+        product.setCode(code);
 
         this.productController.create(product);
         this.dispose();

@@ -4,6 +4,7 @@ import controller.ProductController;
 import database.model.Product;
 import helpers.CustomTableModel;
 import helpers.LayoutConstraints;
+import views.forms.OrderForm;
 import views.forms.ProductForm;
 import views.reports.OrderReport;
 import views.reports.ProfitReport;
@@ -43,6 +44,11 @@ public class Products extends JPanel {
         this.add(refreshButton, constraints);
 
         layoutConstraints.addColumn();
+        JButton orderButton = new JButton("Gerar Pedido");
+        orderButton.addActionListener(e -> this.goToOrderForm(e));
+        this.add(orderButton,constraints);
+
+        layoutConstraints.addColumn();
         JButton orderReportButton = new JButton("Relatório de vendas");
         orderReportButton.addActionListener(e -> this.goToOrderReport(e));
         this.add(orderReportButton, constraints);
@@ -55,7 +61,7 @@ public class Products extends JPanel {
 
         JTable table = this.createTable();
         layoutConstraints.allSpace();
-        constraints.gridwidth = 4;
+        constraints.gridwidth = 5;
         this.add(table, constraints);
         JScrollPane scrollPane = new JScrollPane(table);
         this.add(scrollPane, constraints);
@@ -99,5 +105,10 @@ public class Products extends JPanel {
     private void goToProfitReport(ActionEvent e) {
         ProfitReport profitReport = new ProfitReport();
         profitReport.setVisible(true);
+    }
+
+    private void goToOrderForm(ActionEvent e) {
+        OrderForm orderForm = new OrderForm();
+        orderForm.setVisible(true);
     }
 }

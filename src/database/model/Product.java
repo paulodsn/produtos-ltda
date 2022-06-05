@@ -5,6 +5,8 @@ public class Product {
     private Double price;
     private Integer stock;
     private Integer quantity;
+    private String code;
+    private Float weight;
 
     public String getName() {
         return name;
@@ -36,5 +38,21 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
     }
 }

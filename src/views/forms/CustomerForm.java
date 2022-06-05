@@ -15,6 +15,9 @@ public class CustomerForm extends JFrame {
 
     private JTextField nameInput;
     private JTextField emailInput;
+    private JTextField phoneInput;
+    private JTextField addressInput;
+    private JTextField cpfInput;
 
     public CustomerForm() {
         this.layoutConstraints = new LayoutConstraints();
@@ -26,7 +29,7 @@ public class CustomerForm extends JFrame {
     private void init() {
         this.setTitle("Produtos | Formulário de Clientes");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 400);
+        this.setSize(400, 700);
         this.setResizable(false);
 
         JPanel form = getUserForm();
@@ -59,6 +62,35 @@ public class CustomerForm extends JFrame {
         panel.add(emailInput, constraints);
         layoutConstraints.addLine();
 
+        // CPF group
+        layoutConstraints.addLine();
+        JLabel cpfLabel = new JLabel("CPF");
+        panel.add(cpfLabel, constraints);
+        layoutConstraints.addLine();
+
+        this.cpfInput = new JTextField(30);
+        panel.add(cpfInput, constraints);
+        layoutConstraints.addLine();
+
+        // Address group
+        layoutConstraints.addLine();
+        JLabel adressLabel = new JLabel("Endereço");
+        panel.add(adressLabel, constraints);
+        layoutConstraints.addLine();
+
+        this.addressInput = new JTextField(30);
+        panel.add(addressInput,constraints);
+        layoutConstraints.addLine();
+
+        // Phone group
+        layoutConstraints.addLine();
+        JLabel phoneLabel = new JLabel("Telefone");
+        panel.add(phoneLabel, constraints);
+        layoutConstraints.addLine();
+
+        this.phoneInput = new JTextField(30);
+        panel.add(phoneInput, constraints);
+        layoutConstraints.addLine();
 
         JButton loginButton = new JButton("Salvar");
         loginButton.addActionListener(e -> this.actionSaveCustomer(e));
@@ -70,10 +102,16 @@ public class CustomerForm extends JFrame {
     private void actionSaveCustomer(ActionEvent e) {
         String name = this.nameInput.getText();
         String email = this.emailInput.getText();
+        String phone = this.phoneInput.getText();
+        String adress = this.addressInput.getText();
+        String cpf = this.cpfInput.getText();
 
         Customer customer = new Customer();
         customer.setName(name);
         customer.setEmail(email);
+        customer.setPhone(phone);
+        customer.setAdress(adress);
+        customer.setCpf(cpf);
 
         this.customerController.create(customer);
         this.dispose();
