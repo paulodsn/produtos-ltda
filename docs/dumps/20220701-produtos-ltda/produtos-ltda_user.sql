@@ -16,31 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `product`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product` (
+CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `price` double NOT NULL,
-  `stock` int NOT NULL,
-  `code` varchar(45) NOT NULL,
-  `weight` float NOT NULL,
-  PRIMARY KEY (`id`)
+  `name` text NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` text,
+  `user_type_id` int NOT NULL DEFAULT '2',
+  PRIMARY KEY (`id`,`user_type_id`),
+  KEY `fk_user_user_type1_idx` (`user_type_id`),
+  CONSTRAINT `fk_user_user_type1` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product`
+-- Dumping data for table `user`
 --
 
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Carro',2.2,3405,'54',300),(2,'Telefone',250,4545,'51',34);
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'Paulo','paulo@email.com','q1w2e3r4',2),(2,'Teste','teste@teste.com','q1w2e3r4',2);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-01 20:08:34
+-- Dump completed on 2022-06-07 22:41:28

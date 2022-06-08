@@ -16,32 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `order`
+-- Table structure for table `order_detail`
 --
 
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS `order_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `order_status_id` int NOT NULL,
-  `customer_id` int NOT NULL,
-  PRIMARY KEY (`id`,`order_status_id`),
-  KEY `fk_order_order_status1_idx` (`order_status_id`),
-  KEY `fk_order_customer1_idx` (`customer_id`),
-  CONSTRAINT `fk_order_customer1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
-  CONSTRAINT `fk_order_order_status1` FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `order_detail` (
+  `product_id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  PRIMARY KEY (`product_id`,`order_id`),
+  KEY `fk_product_has_order_order1_idx` (`order_id`),
+  KEY `fk_product_has_order_product1_idx` (`product_id`),
+  CONSTRAINT `fk_product_has_order_order1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
+  CONSTRAINT `fk_product_has_order_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order`
+-- Dumping data for table `order_detail`
 --
 
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (2,1,1),(3,1,1),(4,1,1),(5,1,1),(6,1,1),(7,1,1);
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+LOCK TABLES `order_detail` WRITE;
+/*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
+INSERT INTO `order_detail` VALUES (1,2,134),(1,3,134),(1,4,134),(1,5,134),(1,6,134),(1,7,134),(1,16,1),(1,17,1),(2,3,134),(2,4,134),(2,5,134),(2,6,134),(2,7,134);
+/*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-01 20:08:33
+-- Dump completed on 2022-06-07 22:41:27

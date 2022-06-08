@@ -16,32 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `order_detail`
+-- Table structure for table `product`
 --
 
-DROP TABLE IF EXISTS `order_detail`;
+DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_detail` (
-  `product_id` int NOT NULL,
-  `order_id` int NOT NULL,
-  `quantity` int NOT NULL,
-  PRIMARY KEY (`product_id`,`order_id`),
-  KEY `fk_product_has_order_order1_idx` (`order_id`),
-  KEY `fk_product_has_order_product1_idx` (`product_id`),
-  CONSTRAINT `fk_product_has_order_order1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
-  CONSTRAINT `fk_product_has_order_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `product` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `price` double NOT NULL,
+  `stock` int NOT NULL,
+  `code` varchar(45) NOT NULL,
+  `weight` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order_detail`
+-- Dumping data for table `product`
 --
 
-LOCK TABLES `order_detail` WRITE;
-/*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
-INSERT INTO `order_detail` VALUES (1,2,134),(1,3,134),(1,4,134),(1,5,134),(1,6,134),(1,7,134),(2,3,134),(2,4,134),(2,5,134),(2,6,134),(2,7,134);
-/*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'Carro',2.2,3405,'54',300),(2,'Telefone',250,4545,'51',34),(3,'Avião',2,2,'512',84),(4,'Produto teste',2304.3,2332,'23',3232);
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-01 20:08:34
+-- Dump completed on 2022-06-07 22:41:27
