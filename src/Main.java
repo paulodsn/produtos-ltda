@@ -1,14 +1,17 @@
-import views.Logged;
+
 import views.Login;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            // TODO: Change screen to login
-            Logged login = new Logged();
-            login.setVisible(true);
+            try {
+                new Login();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         });
     }
 }

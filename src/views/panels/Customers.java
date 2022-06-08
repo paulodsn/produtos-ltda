@@ -2,14 +2,15 @@ package views.panels;
 
 import controller.CustomerController;
 import database.model.Customer;
+import enums.Layout;
 import helpers.CustomTableModel;
 import helpers.LayoutConstraints;
 import views.forms.CustomerForm;
-import views.forms.ProductForm;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class Customers extends JPanel {
@@ -22,7 +23,7 @@ public class Customers extends JPanel {
     public Customers() {
         this.layoutConstraints = new LayoutConstraints();
         this.customerController = new CustomerController();
-
+        this.setBackground(Color.decode("#D9D9D9"));
         this.init();
     }
 
@@ -32,16 +33,28 @@ public class Customers extends JPanel {
         this.setLayout(layout);
 
         layoutConstraints.addLine();
-        JButton addButton = new JButton("Adicionar cliente");
-        addButton.addActionListener(e -> this.goToCustomerForm(e));
+        LabelButton addButton = new LabelButton("Adicionar Cliente", 20, 20, 250, 33, Layout.FONT.getValue());
+        addButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToCustomerForm();
+            }
+        });
+
         this.add(addButton, constraints);
 
         layoutConstraints.addColumn();
-        JButton refreshButton = new JButton("Atualizar a lista");
-        refreshButton.addActionListener(e -> this.findCustomers());
-        this.add(refreshButton, constraints);
-        layoutConstraints.addLine();
+        LabelButton refreshButton = new LabelButton("Atualizar Lista", 20, 20, 250, 33, Layout.FONT.getValue());
+        refreshButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                findCustomers();
+            }
+        });
 
+        this.add(refreshButton, constraints);
+
+        layoutConstraints.addLine();
         JTable table = this.createTable();
         layoutConstraints.allSpace();
         constraints.gridwidth = 2;
@@ -54,10 +67,19 @@ public class Customers extends JPanel {
         JTable table = new JTable(tableModel);
         tableModel.addColumn("Nome");
         tableModel.addColumn("Email");
+        tableModel.addColumn("CPF");
+        tableModel.addColumn("Endereço");
+        tableModel.addColumn("Phone");
         table.getColumnModel().getColumn(0)
                 .setPreferredWidth(60);
         table.getColumnModel().getColumn(1)
                 .setPreferredWidth(120);
+        table.getColumnModel().getColumn(2)
+                .setPreferredWidth(60);
+        table.getColumnModel().getColumn(3)
+                .setPreferredWidth(120);
+        table.getColumnModel().getColumn(4)
+                .setPreferredWidth(60);
         this.findCustomers();
 
         return table;
@@ -68,12 +90,73 @@ public class Customers extends JPanel {
         tableModel.setRowCount(0);
 
         for(Customer c: this.customers) {
-            tableModel.addRow(new Object[]{ c.getName(), c.getEmail() });
+            tableModel.addRow(new Object[]{ c.getName(), c.getEmail(), c.getCpf(), c.getAdress(), c.getPhone() });
         }
     }
 
-    private void goToCustomerForm(ActionEvent e) {
-        CustomerForm customerForm = new CustomerForm();
-        customerForm.setVisible(true);
+    private void goToCustomerForm() {
+        new CustomerForm();
     }
+
+    public class LabelButton extends JLabel {
+        public int colors = 1;
+        public String texts;
+
+        public LabelButton(String text, int posX, int posY, int width, int height, int sizeFont) {
+            this.texts = text;
+            setText(this.texts);
+            setBounds(posX, posY, width, height);
+            setFont(new Font("Arial", Font.BOLD, sizeFont));
+            setForeground(Color.decode("#FFFBFB"));
+            setHorizontalAlignment(CENTER);
+            setOpaque(false);
+            setBorder(BorderFactory.createEmptyBorder(4, 5, 4, 5));
+
+            addMouseListener(new MouseAdapter() {
+                public void mouseExited(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    colors = 1;
+                    setForeground(Color.decode("#FFFBFB"));
+                    repaint();
+                }
+
+                public void mouseEntered(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    colors = 2;
+                    setForeground(Color.decode("#FFFBFB"));
+                    repaint();
+                }
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    colors = 1;
+                    setForeground(Color.decode("#FFFBFB"));
+                    repaint();
+                }
+            });
+
+        }
+
+        protected void paintComponent(Graphics g) {
+            g.setColor(selectColor(colors));
+            g.fillRoundRect(0, 0, getWidth()-1, getHeight(), 10, 10);
+            super.paintComponent(g);
+        }
+    }
+
+    private Color selectColor(int ID) {
+        switch (ID) {
+            case 1:	{
+                return Color.decode("#1B2B55");
+            }
+            case 2:	{
+                return Color.decode("#3A91C3");
+            }
+            default: {
+                return Color.BLACK;
+            }
+        }
+    }
+
 }

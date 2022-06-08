@@ -2,45 +2,38 @@ package views.reports;
 
 import controller.OrderController;
 import helpers.CustomTableModel;
-import helpers.LayoutConstraints;
+import views.ViewDefault;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class OrderReport extends JFrame {
+public class OrderReport extends ViewDefault {
     private List<database.model.OrderReport> orderReportList;
     private CustomTableModel tableModel;
     private OrderController orderController;
-    private LayoutConstraints layoutConstraints;
+
+    private Frames frame;
+    private Panels panel;
 
     public OrderReport() {
         this.tableModel = new CustomTableModel();
-        this.layoutConstraints = new LayoutConstraints();
         this.orderController = new OrderController();
 
-        this.init();
-    }
+        frame = new Frames(800, 500);
+        panel = new Panels(0,0, frame.getWidth(), frame.getHeight());
+        frame.add(panel);
 
-    private void init() {
-        this.setTitle("Produtos | Relatório de Vendas");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1200, 400);
-        this.setResizable(false);
+        ButtonsHover sairButton = new ButtonsHover("sair", 760, 10, 30, 30);
+        sairButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame.dispose();
+            }
+        });
+        panel.add(sairButton);
 
-        GridBagConstraints constraints = layoutConstraints.constraints();
-        GridBagLayout layout = new GridBagLayout();
-        this.setLayout(layout);
-
-        JTable table = getTableReport();
-        layoutConstraints.allSpace();
-        this.getContentPane().add(table);
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        this.add(scrollPane, constraints);
-    }
-
-    public JTable getTableReport() {
         JTable table = new JTable(tableModel);
         tableModel.addColumn("Cliente");
         tableModel.addColumn("Endereço");
@@ -63,7 +56,16 @@ public class OrderReport extends JFrame {
                 .setPreferredWidth(40);
 
         this.fetchReportData();
-        return table;
+        table.setBounds(20, 60, 760, 400);
+        panel.add(table);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(20, 60, 760, 400);
+        panel.add(scrollPane);
+
+        frame.setVisible(true);
+        panel.requestFocusPanel();
+        frame.setAlwaysOnTop(true);
     }
 
     private void fetchReportData() {

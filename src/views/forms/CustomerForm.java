@@ -2,118 +2,121 @@ package views.forms;
 
 import controller.CustomerController;
 import database.model.Customer;
-import helpers.LayoutConstraints;
+import enums.Layout;
+import views.ViewDefault;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class CustomerForm extends JFrame {
-    private JPanel panel;
-    private LayoutConstraints layoutConstraints;
+public class CustomerForm extends ViewDefault {
     private CustomerController customerController;
+    private TextFieldsBorder tfNome, tfEmail, tfPhone, tfAddress, tfCpf;
 
-    private JTextField nameInput;
-    private JTextField emailInput;
-    private JTextField phoneInput;
-    private JTextField addressInput;
-    private JTextField cpfInput;
+    private Frames frame;
+    private Panels2 panel;
 
     public CustomerForm() {
-        this.layoutConstraints = new LayoutConstraints();
-        this.customerController = new CustomerController();
+        customerController = new CustomerController();
+        frame = new Frames(400, 500);
+        panel = new Panels2(0,0, frame.getWidth(), frame.getHeight());
+        frame.add(panel);
 
-        this.init();
+        ButtonsHover sairButton = new ButtonsHover("sair", 360, 10, 30, 30);
+        sairButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame.dispose();
+            }
+        });
+        panel.add(sairButton);
+
+        // NAME GROUP
+        JLabel jbNome = new JLabel("Nome");
+        jbNome.setBounds(20, 30, 100, 30);
+        jbNome.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbNome.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbNome);
+
+        tfNome = new TextFieldsBorder("Nome", 20, 60, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NOME, 100);
+        tfNome.setText("Nome");
+        panel.add(tfNome);
+
+        // EMAIL GROUP
+        JLabel jbEmail = new JLabel("Email");
+        jbEmail.setBounds(20, 110, 100, 30);
+        jbEmail.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbEmail.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbEmail);
+
+        tfEmail = new TextFieldsBorder("Email", 20, 140, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.EMAIL, 100);
+        tfEmail.setText("Email");
+        panel.add(tfEmail);
+
+        // CPF GROUP
+        JLabel JbCpf = new JLabel("CPF");
+        JbCpf.setBounds(20, 190, 100, 30);
+        JbCpf.setFont(selectFont(TypeField.DEFAULT, 20));
+        JbCpf.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(JbCpf);
+
+        tfCpf = new TextFieldsBorder("CPF", 20, 220, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfCpf.setText("CPF");
+        panel.add(tfCpf);
+
+        // ADDRESS GROUP
+        JLabel jbAddress = new JLabel("Endereço");
+        jbAddress.setBounds(20, 270, 100, 30);
+        jbAddress.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbAddress.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbAddress);
+
+        tfAddress = new TextFieldsBorder("Endereço", 20, 300, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.ENDERECO, 100);
+        tfAddress.setText("CPF");
+        panel.add(tfAddress);
+
+        // PHONE GROUP
+        JLabel jbPhone = new JLabel("Telefone");
+        jbPhone.setBounds(20, 350, 100, 30);
+        jbPhone.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbPhone.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbPhone);
+
+        tfPhone = new TextFieldsBorder("Telefone", 20, 380, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfPhone.setText("Telefone");
+        panel.add(tfPhone);
+
+        // SAVE BUTTON
+        LabelButton saveBtn = new LabelButton("Salvar", 100, 430, 200, 33, TypeField.BUTTON_LOGIN, Layout.FONT.getValue());
+        saveBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                actionSaveCustomer();
+            }
+        });
+        panel.add(saveBtn);
+
+
+        frame.setVisible(true);
+        panel.requestFocusPanel();
+        frame.setAlwaysOnTop(true);
     }
 
-    private void init() {
-        this.setTitle("Produtos | Formulário de Clientes");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 700);
-        this.setResizable(false);
-
-        JPanel form = getUserForm();
-        this.getContentPane().add(form);
-    }
-
-    public JPanel getUserForm() {
-        GridBagConstraints constraints = layoutConstraints.constraints();
-
-        GridBagLayout layout = new GridBagLayout();
-        panel = new JPanel(layout);
-
-        // Name group
-        layoutConstraints.addLine();
-        JLabel titleLabel = new JLabel("Nome");
-        panel.add(titleLabel, constraints);
-        layoutConstraints.addLine();
-
-        this.nameInput = new JTextField(30);
-        panel.add(nameInput, constraints);
-        layoutConstraints.addLine();
-
-        // Email group
-        layoutConstraints.addLine();
-        JLabel emailLabel = new JLabel("Email");
-        panel.add(emailLabel, constraints);
-        layoutConstraints.addLine();
-
-        this.emailInput = new JTextField(30);
-        panel.add(emailInput, constraints);
-        layoutConstraints.addLine();
-
-        // CPF group
-        layoutConstraints.addLine();
-        JLabel cpfLabel = new JLabel("CPF");
-        panel.add(cpfLabel, constraints);
-        layoutConstraints.addLine();
-
-        this.cpfInput = new JTextField(30);
-        panel.add(cpfInput, constraints);
-        layoutConstraints.addLine();
-
-        // Address group
-        layoutConstraints.addLine();
-        JLabel adressLabel = new JLabel("Endereço");
-        panel.add(adressLabel, constraints);
-        layoutConstraints.addLine();
-
-        this.addressInput = new JTextField(30);
-        panel.add(addressInput,constraints);
-        layoutConstraints.addLine();
-
-        // Phone group
-        layoutConstraints.addLine();
-        JLabel phoneLabel = new JLabel("Telefone");
-        panel.add(phoneLabel, constraints);
-        layoutConstraints.addLine();
-
-        this.phoneInput = new JTextField(30);
-        panel.add(phoneInput, constraints);
-        layoutConstraints.addLine();
-
-        JButton loginButton = new JButton("Salvar");
-        loginButton.addActionListener(e -> this.actionSaveCustomer(e));
-        panel.add(loginButton, constraints);
-
-        return panel;
-    }
-
-    private void actionSaveCustomer(ActionEvent e) {
-        String name = this.nameInput.getText();
-        String email = this.emailInput.getText();
-        String phone = this.phoneInput.getText();
-        String adress = this.addressInput.getText();
-        String cpf = this.cpfInput.getText();
+    private void actionSaveCustomer() {
+        String name = this.tfNome.getText();
+        String email = this.tfEmail.getText();
+        String phone = this.tfPhone.getText();
+        String address = this.tfAddress.getText();
+        String cpf = this.tfCpf.getText();
 
         Customer customer = new Customer();
         customer.setName(name);
         customer.setEmail(email);
         customer.setPhone(phone);
-        customer.setAdress(adress);
+        customer.setAdress(address);
         customer.setCpf(cpf);
 
-        this.customerController.create(customer);
-        this.dispose();
+        customerController.create(customer);
+        frame.dispose();
     }
 }

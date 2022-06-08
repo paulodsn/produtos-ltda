@@ -2,8 +2,10 @@ package views.panels;
 
 import controller.ProductController;
 import database.model.Product;
+import enums.Layout;
 import helpers.CustomTableModel;
 import helpers.LayoutConstraints;
+import views.ViewDefault;
 import views.forms.OrderForm;
 import views.forms.ProductForm;
 import views.reports.OrderReport;
@@ -11,7 +13,8 @@ import views.reports.ProfitReport;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class Products extends JPanel {
@@ -24,7 +27,7 @@ public class Products extends JPanel {
     public Products() {
         this.layoutConstraints = new LayoutConstraints();
         this.productController = new ProductController();
-
+        this.setBackground(Color.decode("#D9D9D9"));
         this.init();
     }
 
@@ -34,28 +37,53 @@ public class Products extends JPanel {
         this.setLayout(layout);
 
         layoutConstraints.addLine();
-        JButton addButton = new JButton("Adicionar produto");
-        addButton.addActionListener(e -> this.goToProductForm(e));
+        LabelButton addButton = new LabelButton("Adicionar Produto", 20, 20, 100, 33, Layout.FONT.getValue());
+        addButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToProductForm();
+            }
+        });
         this.add(addButton, constraints);
 
         layoutConstraints.addColumn();
-        JButton refreshButton = new JButton("Atualizar a lista");
-        refreshButton.addActionListener(e -> this.findProducts());
+        LabelButton refreshButton = new LabelButton("Atualizar Lista",20, 20, 100, 33, Layout.FONT.getValue());
+        refreshButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                findProducts();
+            }
+        });
         this.add(refreshButton, constraints);
 
         layoutConstraints.addColumn();
-        JButton orderButton = new JButton("Gerar Pedido");
-        orderButton.addActionListener(e -> this.goToOrderForm(e));
-        this.add(orderButton,constraints);
+        LabelButton orderButton = new LabelButton("Gerar Pedido",20, 20, 100, 33, Layout.FONT.getValue());
+        orderButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToOrderForm();
+            }
+        });
+        this.add(orderButton, constraints);
 
         layoutConstraints.addColumn();
-        JButton orderReportButton = new JButton("Relatório de vendas");
-        orderReportButton.addActionListener(e -> this.goToOrderReport(e));
+        LabelButton orderReportButton = new LabelButton("Relatório de Vendas",20, 20, 100, 33, Layout.FONT.getValue());
+        orderReportButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToOrderReport();
+            }
+        });
         this.add(orderReportButton, constraints);
 
         layoutConstraints.addColumn();
-        JButton profitReportButton = new JButton("Relatório de Lucro");
-        profitReportButton.addActionListener(e -> this.goToProfitReport(e));
+        LabelButton profitReportButton = new LabelButton("Relatório de Lucro",20, 20, 100, 33, Layout.FONT.getValue());
+        profitReportButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToProfitReport();
+            }
+        });
         this.add(profitReportButton, constraints);
         layoutConstraints.addLine();
 
@@ -76,7 +104,7 @@ public class Products extends JPanel {
                 .setPreferredWidth(60);
         table.getColumnModel().getColumn(1)
                 .setPreferredWidth(40);
-        table.getColumnModel().getColumn(2)
+        table.getColumnModel().getColumn(1)
                 .setPreferredWidth(40);
         this.findProducts();
 
@@ -92,23 +120,82 @@ public class Products extends JPanel {
         }
     }
 
-    private void goToProductForm(ActionEvent e) {
-        ProductForm productForm = new ProductForm();
-        productForm.setVisible(true);
+    private void goToProductForm() {
+        new ProductForm();
     }
 
-    private void goToOrderReport(ActionEvent e) {
-        OrderReport orderReport = new OrderReport();
-        orderReport.setVisible(true);
+    private void goToOrderReport() {
+        new OrderReport();
     }
 
-    private void goToProfitReport(ActionEvent e) {
-        ProfitReport profitReport = new ProfitReport();
-        profitReport.setVisible(true);
+    private void goToProfitReport() {
+        new ProfitReport();
     }
 
-    private void goToOrderForm(ActionEvent e) {
-        OrderForm orderForm = new OrderForm();
-        orderForm.setVisible(true);
+    private void goToOrderForm() {
+        new OrderForm();
+    }
+
+    public class LabelButton extends JLabel {
+
+        public ViewDefault.TypeField typeField;
+        public int colors = 1;
+        public String texts;
+
+        public LabelButton(String text, int posX, int posY, int width, int height, int sizeFont) {
+            this.texts = text;
+            setText(this.texts);
+            setBounds(posX, posY, width, height);
+            setFont(new Font("Arial", Font.BOLD, sizeFont));
+            setForeground(Color.decode("#FFFBFB"));
+            setHorizontalAlignment(CENTER);
+            setOpaque(false);
+            setBorder(BorderFactory.createEmptyBorder(4, 5, 4, 5));
+
+            addMouseListener(new MouseAdapter() {
+                public void mouseExited(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    colors = 1;
+                    setForeground(Color.decode("#FFFBFB"));
+                    repaint();
+                }
+
+                public void mouseEntered(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    colors = 2;
+                    setForeground(Color.decode("#FFFBFB"));
+                    repaint();
+                }
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    colors = 1;
+                    setForeground(Color.decode("#FFFBFB"));
+                    repaint();
+                }
+            });
+
+        }
+
+        protected void paintComponent(Graphics g) {
+            g.setColor(selectColor(colors));
+            g.fillRoundRect(0, 0, getWidth()-1, getHeight(), 10, 10);
+            super.paintComponent(g);
+        }
+    }
+
+    private Color selectColor(int ID) {
+        switch (ID) {
+            case 1:	{
+                return Color.decode("#1B2B55");
+            }
+            case 2:	{
+                return Color.decode("#3A91C3");
+            }
+            default:{
+                return Color.BLACK;
+            }
+        }
     }
 }

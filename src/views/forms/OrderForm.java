@@ -3,102 +3,105 @@ package views.forms;
 import controller.OrderController;
 import database.model.Order;
 import database.model.OrderDetail;
-import helpers.LayoutConstraints;
+import enums.Layout;
+import views.ViewDefault;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderForm extends JFrame {
-    private JPanel panel;
-    private LayoutConstraints layoutConstraints;
+public class OrderForm extends ViewDefault {
     private OrderController orderController;
+    private TextFieldsBorder tfProductId, tfCustomerId, tfStatusId, tfQuantity;
 
-    private JTextField productIdInput;
-    private JTextField customerIdInput;
-    private JTextField statusIdInput;
-    private JTextField quantityInput;
+    private Frames frame;
+    private Panels2 panel;
 
     public OrderForm() {
-        this.layoutConstraints = new LayoutConstraints();
         this.orderController = new OrderController();
+        frame = new Frames(400, 500);
+        panel = new Panels2(0,0, frame.getWidth(), frame.getHeight());
+        frame.add(panel);
 
-        this.init();
-    }
-
-    private void init() {
-        this.setTitle("Produtos | Formulário de Pedidos");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 700);
-        this.setResizable(false);
-
-        JPanel form = getOrderForm();
-        this.getContentPane().add(form);
-    }
-
-    public JPanel getOrderForm(){
-        GridBagConstraints constraints = layoutConstraints.constraints();
-
-        GridBagLayout layout = new GridBagLayout();
-        panel = new JPanel(layout);
+        ButtonsHover sairButton = new ButtonsHover("sair", 360, 10, 30, 30);
+        sairButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame.dispose();
+            }
+        });
+        panel.add(sairButton);
 
         // Customer ID group
-        layoutConstraints.addLine();
-        JLabel customerIdLabel = new JLabel("ID do Cliente");
-        panel.add(customerIdLabel, constraints);
-        layoutConstraints.addLine();
+        JLabel jbCustomerId = new JLabel("ID do cliente");
+        jbCustomerId.setBounds(20, 30, 400, 30);
+        jbCustomerId.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbCustomerId.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbCustomerId);
 
-        this.customerIdInput = new JTextField(30);
-        panel.add(customerIdInput, constraints);
-        layoutConstraints.addLine();
+        tfCustomerId = new TextFieldsBorder("0", 20, 60, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfCustomerId.setText("0");
+        panel.add(tfCustomerId);
 
         // Status ID group
-        layoutConstraints.addLine();
-        JLabel statusIdLabel = new JLabel("ID do Status");
-        panel.add(statusIdLabel, constraints);
-        layoutConstraints.addLine();
+        JLabel jbStatusId = new JLabel("ID do status");
+        jbStatusId.setBounds(20, 110, 400, 30);
+        jbStatusId.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbStatusId.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbStatusId);
 
-        this.statusIdInput = new JTextField(30);
-        panel.add(statusIdInput, constraints);
-        layoutConstraints.addLine();
+        tfStatusId = new TextFieldsBorder("0", 20, 140, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfStatusId.setText("0");
+        panel.add(tfStatusId);
 
         // Product ID group
-        layoutConstraints.addLine();
-        JLabel productIdLabel = new JLabel("ID do produto");
-        panel.add(productIdLabel, constraints);
-        layoutConstraints.addLine();
+        JLabel jbProductId = new JLabel("ID do produto");
+        jbProductId.setBounds(20, 190, 400, 30);
+        jbProductId.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbProductId.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbProductId);
 
-        this.productIdInput = new JTextField(30);
-        panel.add(productIdInput, constraints);
-        layoutConstraints.addLine();
+        tfProductId = new TextFieldsBorder("0", 20, 220, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfProductId.setText("0");
+        panel.add(tfProductId);
+
 
         // Quantity group
-        layoutConstraints.addLine();
-        JLabel quantityLabel = new JLabel("Quantidade");
-        panel.add(quantityLabel, constraints);
-        layoutConstraints.addLine();
+        JLabel jbQuantity = new JLabel("Quantidade");
+        jbQuantity.setBounds(20, 270, 400, 30);
+        jbQuantity.setFont(selectFont(TypeField.DEFAULT, 20));
+        jbQuantity.setForeground(selectForeground(TypeField.TEXTFIELDS));
+        panel.add(jbQuantity);
 
-        this.quantityInput = new JTextField(30);
-        panel.add(quantityInput, constraints);
-        layoutConstraints.addLine();
+        tfQuantity = new TextFieldsBorder("0", 20, 300, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfQuantity.setText("0");
+        panel.add(tfQuantity);
 
-        JButton orderSaveButton = new JButton("Salvar");
-        orderSaveButton.addActionListener(e -> this.actionSaveCustomer(e));
-        panel.add(orderSaveButton, constraints);
+        //SAVE BUTTON
+        LabelButton saveBtn = new LabelButton("Salvar", 100, 350, 200, 33, TypeField.BUTTON_LOGIN, Layout.FONT.getValue());
+        saveBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                saveOrder();
+            }
+        });
+        panel.add(saveBtn);
 
-        return panel;
+        frame.setVisible(true);
+        panel.requestFocusPanel();
+        frame.setAlwaysOnTop(true);
     }
 
-    private void actionSaveCustomer(ActionEvent e) {
+    private void saveOrder() {
         List<OrderDetail> orderDetailList = new ArrayList<>();
 
-        String statusId = this.statusIdInput.getText();
-        String customerId = this.customerIdInput.getText();
+        String statusId = this.tfStatusId.getText();
+        String customerId = this.tfCustomerId.getText();
 
-        Number productId = Integer.parseInt(this.productIdInput.getText());
-        Number quantityId = Integer.parseInt(this.quantityInput.getText());
+        Number productId = Integer.parseInt(this.tfProductId.getText());
+        Number quantityId = Integer.parseInt(this.tfQuantity.getText());
 
         OrderDetail product = new OrderDetail();
         product.setProductId(productId);
@@ -112,7 +115,6 @@ public class OrderForm extends JFrame {
         order.setOrderDetailList(orderDetailList);
 
         this.orderController.create(order);
-        this.dispose();
-
+        frame.dispose();
     }
 }
