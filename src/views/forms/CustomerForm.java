@@ -60,8 +60,8 @@ public class CustomerForm extends ViewDefault {
         JbCpf.setForeground(selectForeground(TypeField.TEXTFIELDS));
         panel.add(JbCpf);
 
-        tfCpf = new TextFieldsBorder("CPF", 20, 220, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
-        tfCpf.setText("CPF");
+        tfCpf = new TextFieldsBorder("0000000000", 20, 220, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfCpf.setText("0000000000");
         panel.add(tfCpf);
 
         // ADDRESS GROUP
@@ -72,7 +72,7 @@ public class CustomerForm extends ViewDefault {
         panel.add(jbAddress);
 
         tfAddress = new TextFieldsBorder("Endereço", 20, 300, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.ENDERECO, 100);
-        tfAddress.setText("CPF");
+        tfAddress.setText("Endereço");
         panel.add(tfAddress);
 
         // PHONE GROUP
@@ -82,8 +82,8 @@ public class CustomerForm extends ViewDefault {
         jbPhone.setForeground(selectForeground(TypeField.TEXTFIELDS));
         panel.add(jbPhone);
 
-        tfPhone = new TextFieldsBorder("Telefone", 20, 380, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
-        tfPhone.setText("Telefone");
+        tfPhone = new TextFieldsBorder("999999999", 20, 380, 360, 33, TypeField.TEXTFIELDS, Layout.FONT.getValue(), StringLimiter.TypeText.NUMERO_INTEIRO, 100);
+        tfPhone.setText("999999999");
         panel.add(tfPhone);
 
         // SAVE BUTTON
@@ -113,7 +113,7 @@ public class CustomerForm extends ViewDefault {
         customer.setName(name);
         customer.setEmail(email);
         customer.setPhone(phone);
-        customer.setAdress(address);
+        customer.setAddress(address);
         customer.setCpf(cpf);
 
         customerController.create(customer);

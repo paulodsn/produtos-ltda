@@ -1,32 +1,36 @@
 package database.dao;
 
-import database.Connection;
+import database.Database;
 import database.model.Product;
-import groovy.sql.Sql;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.SQLException;
+import java.sql.*;
+
 public class ProductDAO {
-    private Sql db;
+    private Database db;
 
     public ProductDAO() {
-        this.db = new Connection().getInstance();
+        this.db = new Database();
     }
 
     public List<Product> find() {
         List<Product> products = new ArrayList<>();
 
         try {
-            db.rows("SELECT * FROM product").forEach(row -> {
+            ResultSet result = db.query("SELECT * FROM product");
+            
+            while(result.next()) {
                 Product product = new Product();
-                product.setName(row.getAt(1).toString());
-                product.setPrice((Double) row.getAt(2));
-                product.setStock((Integer) row.getAt(3));
+                product.setName(result.getString(2));
+                product.setPrice(result.getDouble(3));
+                product.setStock(result.getInt(4));
 
                 products.add(product);
-            });
+            };
         } catch (SQLException e) {
             e.printStackTrace();
         }

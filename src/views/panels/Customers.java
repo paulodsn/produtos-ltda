@@ -90,7 +90,7 @@ public class Customers extends JPanel {
         tableModel.setRowCount(0);
 
         for(Customer c: this.customers) {
-            tableModel.addRow(new Object[]{ c.getName(), c.getEmail(), c.getCpf(), c.getAdress(), c.getPhone() });
+            tableModel.addRow(new Object[]{ c.getName(), c.getEmail(), c.getCpf(), c.getAddress(), c.getPhone() });
         }
     }
 

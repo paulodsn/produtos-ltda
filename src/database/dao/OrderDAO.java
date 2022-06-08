@@ -1,22 +1,22 @@
 package database.dao;
 
-import database.Connection;
+import database.Database;
 import database.model.Order;
 import database.model.OrderDetail;
 import database.model.OrderReport;
 import database.model.ProfitReport;
-import groovy.sql.Sql;
 
-import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.SQLException;
+import java.sql.*;
+
 public class OrderDAO {
-    private Sql db;
+    private Database db;
 
     public OrderDAO() {
-        this.db = new Connection().getInstance();
+        this.db = new Database();
     }
 
     public void create(Order order) {
@@ -27,14 +27,13 @@ public class OrderDAO {
         List<OrderDetail> orderDetailList = order.getOrderDetailList();
 
         try {
-            db.executeInsert("INSERT INTO `order` (order_status_id, customer_id) VALUES (?, ?)", fields).forEach(row -> {
-                Number orderId = Integer.parseInt(row.get(0).toString());
-
+            ResultSet result = this.db.executeInsert("INSERT INTO `order` (order_status_id, customer_id) VALUES (?, ?)", fields);
+            if(result.next()) {
                 for (int i = 0; i < orderDetailList.size(); i++) {
                     OrderDetail x = orderDetailList.get(i);
                     ArrayList<Object> detailFields = new ArrayList<>();
                     detailFields.add(x.getProductId());
-                    detailFields.add(orderId);
+                    detailFields.add(result.getInt(1));
                     detailFields.add(x.getQuantity());
 
                     try {
@@ -43,7 +42,7 @@ public class OrderDAO {
                         throw new RuntimeException(e);
                     }
                 }
-            });
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,7 +52,7 @@ public class OrderDAO {
         List<OrderReport> orderReport = new ArrayList<>();
 
         try {
-            db.rows("" +
+            ResultSet result = db.query("" +
                     "SELECT \n" +
                         " c.name as customer_name,\n" +
                         " c.address as customer_address,\n" +
@@ -75,17 +74,19 @@ public class OrderDAO {
                     "ORDER BY \n" +
                         "order_id \n" +
                     ";"
-            ).forEach(row -> {
+            );
+            
+            while(result.next()) {
                 OrderReport order = new OrderReport();
-                order.setCustomerName(row.getAt(0).toString());
-                order.setCustomerAddress(row.getAt(1).toString());
-                order.setOrderId((Integer) row.getAt(2));
-                order.setProductName(row.getAt(3).toString());
-                order.setPrice((Double) row.getAt(4));
-                order.setQuantity((Integer) row.getAt(5));
+                order.setCustomerName(result.getString(1));
+                order.setCustomerAddress(result.getString(2));
+                order.setOrderId(result.getInt(3));
+                order.setProductName(result.getString(4));
+                order.setPrice(result.getDouble(5));
+                order.setQuantity(result.getInt(6));
 
                 orderReport.add(order);
-            });
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,7 +98,7 @@ public class OrderDAO {
         List<ProfitReport> profitReport = new ArrayList<>();
 
         try {
-            db.rows("" +
+            ResultSet result = db.query("" +
                     "SELECT \n" +
                         "name, \n" +
                         "price, \n" +
@@ -116,19 +117,20 @@ public class OrderDAO {
                                 "od.product_id = p.id\n" +
                             "GROUP BY\n" +
                                 "name,\n" +
-                                "price,\n" +
-                                "quantity\n" +
+                                "price\n" +
                         ") as groupedOrder\n" +
                     ";"
-            ).forEach(row -> {
+            );
+            
+            while(result.next()) {
                 ProfitReport profit = new ProfitReport();
-                profit.setName(row.getAt(0).toString());
-                profit.setPrice((Double) row.getAt(1));
-                profit.setQuantity((BigDecimal) row.getAt(2));
-                profit.setProfit((Double) row.getAt(3));
+                profit.setName(result.getString(1));
+                profit.setPrice(result.getDouble(2));
+                profit.setQuantity(result.getBigDecimal(3));
+                profit.setProfit(result.getDouble(4));
 
                 profitReport.add(profit);
-            });
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

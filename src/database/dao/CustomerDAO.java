@@ -1,36 +1,41 @@
 package database.dao;
 
-import database.Connection;
+import database.Database;
 import database.model.Customer;
-import groovy.sql.Sql;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import java.sql.SQLException;
+import java.sql.*;
 
 public class CustomerDAO {
-    private Sql db;
+    private Database db;
 
     public CustomerDAO() {
-        this.db = new Connection().getInstance();
+        this.db = new Database();
     }
 
     public List<Customer> find() {
         List<Customer> customers = new ArrayList<>();
 
         try {
-            db.rows("SELECT * FROM customer").forEach(row -> {
+            ResultSet result = this.db.query("SELECT * FROM customer");
+            
+            while(result.next()) {
                 Customer customer = new Customer();
-                customer.setName(row.getAt(1).toString());
-                customer.setEmail(row.getAt(2).toString());
-                customer.setPhone(row.getAt(3).toString());
-                customer.setAdress(row.getAt(4).toString());
-                customer.setCpf(row.getAt(5).toString());
-
+                customer.setName(result.getString(2));
+                customer.setEmail(result.getString(3));
+                customer.setCpf(result.getString(4));
+                customer.setAddress(result.getString(5));
+                customer.setPhone(result.getString(6));
+                
                 customers.add(customer);
-            });
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
 
         return customers;
@@ -41,13 +46,13 @@ public class CustomerDAO {
         fields.add(customer.getName());
         fields.add(customer.getEmail());
         fields.add(customer.getPhone());
-        fields.add(customer.getAdress());
+        fields.add(customer.getAddress());
         fields.add(customer.getCpf());
 
         try {
-            db.executeInsert("INSERT INTO customer (name, email, phone, address, cpf) VALUES (?, ?, ?, ?, ?)", fields);
+            this.db.executeInsert("INSERT INTO customer (name, email, phone, address, cpf) VALUES (?, ?, ?, ?, ?)", fields);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 }

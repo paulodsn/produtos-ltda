@@ -1,53 +1,54 @@
 package database.dao;
 
-import database.Connection;
+import database.Database;
 import database.model.User;
-import groovy.sql.GroovyRowResult;
-import groovy.sql.Sql;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.SQLException;
+import java.sql.*;
+
 public class UserDAO {
-    private Sql db;
+    private Database db;
 
     public UserDAO()  {
-        this.db = new Connection().getInstance();
+        this.db = new Database();
     }
 
     public User findByNameAndPassword(String email, String password) {
-        GroovyRowResult userData = null;
         try {
             ArrayList<Object> params = new ArrayList<>();
             params.add(email);
             params.add(password);
-            userData = db.firstRow("select * from user where email = ? and password = ?", params);
+            
+            ResultSet result = db.query("select * from user where email = ? and password = ?", params);
+            if(result.next()) {
+                User user = new User();
+                user.setName(result.getString(2));
+                user.setEmail(result.getString(3));
+                return user;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        if (userData == null) {
-            return null;
-        }
-
-        User user = new User();
-        user.setName((String) userData.getAt(1));
-        user.setEmail((String) userData.getAt(2));
-        return user;
+        return null;
     }
 
     public List<User> find() {
         List<User> users = new ArrayList<>();
 
         try {
-            db.rows("select * from user").forEach(row -> {
+            ResultSet result = db.query("select * from user");
+
+            while(result.next()) {
                 User user = new User();
-                user.setName((String) row.getAt(1));
-                user.setEmail((String) row.getAt(2));
+                user.setName(result.getString(2));
+                user.setEmail(result.getString(3));
                 
                 users.add(user);
-            });
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

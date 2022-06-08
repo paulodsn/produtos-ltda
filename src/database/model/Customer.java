@@ -4,7 +4,7 @@ public class Customer {
     private String name;
     private String email;
     private String phone;
-    private String adress;
+    private String address;
     private String cpf;
 
     public String getName() {
@@ -31,12 +31,12 @@ public class Customer {
         this.phone = phone;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String adress) {
+        this.address = adress;
     }
 
     public String getCpf() {
